@@ -3,11 +3,15 @@
   "builds": [
     { "src": "api/analyze.py",   "use": "@vercel/python" },
     { "src": "api/architect.py", "use": "@vercel/python" },
-    { "src": "index.html",       "use": "@vercel/static"  }
+    { "src": "index.html",       "use": "@vercel/static" },
+    { "src": "style.css",        "use": "@vercel/static" },
+    { "src": "script.js",        "use": "@vercel/static" }
   ],
   "routes": [
     { "src": "/api/analyze",   "dest": "/api/analyze.py"   },
     { "src": "/api/architect", "dest": "/api/architect.py" },
+    { "src": "/style.css",     "dest": "/style.css"        },
+    { "src": "/script.js",     "dest": "/script.js"        },
     { "src": "/(.*)",          "dest": "/index.html"       }
   ]
 }
