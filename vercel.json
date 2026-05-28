@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "api/analyze.py",   "use": "@vercel/python" },
+    { "src": "api/architect.py", "use": "@vercel/python" },
+    { "src": "index.html",       "use": "@vercel/static"  }
+  ],
+  "routes": [
+    { "src": "/api/analyze",   "dest": "/api/analyze.py"   },
+    { "src": "/api/architect", "dest": "/api/architect.py" },
+    { "src": "/(.*)",          "dest": "/index.html"       }
+  ]
+}

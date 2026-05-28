@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>WebLens — URL Analyzer & AWS Architect AI</title>
+<meta name="description" content="Paste any URL and get instant AI analysis. Describe your project and get a tailored AWS architecture with cost estimates."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#060810;--bg2:#0a0d18;--bg3:#0f1220;
+  --surface:rgba(99,102,241,.03);--surface2:rgba(255,255,255,.04);--surface3:rgba(255,255,255,.07);
+  --primary:#818cf8;--primary-bright:#6366f1;--primary-dim:rgba(99,102,241,.12);--primary-glow:rgba(99,102,241,.25);
+  --cyan:#22d3ee;--cyan-dim:rgba(34,211,238,.1);
+  --green:#34d399;--green-dim:rgba(52,211,153,.1);
+  --orange:#fb923c;--orange-dim:rgba(251,146,60,.1);
+  --red:#f87171;--red-dim:rgba(248,113,113,.1);
+  --yellow:#fbbf24;--yellow-dim:rgba(251,191,36,.1);
+  --text:#dde4f5;--muted:#3d4a6a;--muted2:#5a6a8a;
+  --border:rgba(99,102,241,.08);--border2:rgba(255,255,255,.055);
+  --radius:12px;
+  --fh:'Syne',sans-serif;--fb:'DM Sans',sans-serif;--fm:'IBM Plex Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--fb);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 75% 50% at 50% -8%,rgba(99,102,241,.08) 0%,transparent 60%),
+    radial-gradient(ellipse 55% 40% at 10% 80%,rgba(34,211,238,.04) 0%,transparent 50%);
+}
+
+/* ── NAV ─────────────────────────────────────── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.9rem 2.5rem;
+  background:rgba(6,8,16,.88);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border2);
+}
+.logo{font-family:var(--fh);font-weight:800;font-size:1.1rem;text-decoration:none;color:var(--text);display:flex;align-items:center;gap:.6rem}
+.logo-icon{
+  width:28px;height:28px;border-radius:7px;
+  background:linear-gradient(135deg,var(--primary-bright),var(--cyan));
+  display:flex;align-items:center;justify-content:center;font-size:.85rem;
+}
+.logo span{color:var(--primary)}
+.nav-links{display:flex;align-items:center;gap:2rem;list-style:none}
+.nav-links a{font-size:.84rem;font-weight:500;color:var(--muted2);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{background:var(--primary-dim);border:1px solid rgba(99,102,241,.28);color:var(--primary)!important;padding:.4rem 1.1rem;border-radius:7px;font-weight:600!important;transition:background .2s,border-color .2s!important}
+.nav-cta:hover{background:rgba(99,102,241,.2)!important;border-color:rgba(99,102,241,.5)!important}
+
+/* ── HERO ─────────────────────────────────────── */
+.hero{
+  position:relative;z-index:1;
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  flex-direction:column;text-align:center;
+  padding:8rem 2.5rem 5rem;
+}
+.hero-inner{max-width:760px}
+.badge{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:var(--primary-dim);border:1px solid rgba(99,102,241,.22);
+  color:var(--primary);font-family:var(--fm);font-size:.72rem;letter-spacing:.08em;
+  padding:.38rem 1rem;border-radius:20px;margin-bottom:1.8rem;
+  animation:fadeUp .7s ease both;
+}
+.badge-dot{width:6px;height:6px;background:var(--primary);border-radius:50%;animation:pulse 1.8s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+h1{
+  font-family:var(--fh);font-size:clamp(2.4rem,5vw,4.2rem);
+  font-weight:800;line-height:1.05;letter-spacing:-.025em;
+  margin-bottom:1.4rem;animation:fadeUp .7s .08s ease both;
+}
+h1 .grad{
+  background:linear-gradient(120deg,var(--primary) 0%,var(--cyan) 55%,#a5b4fc 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-sub{
+  font-size:1.05rem;color:var(--muted2);line-height:1.75;
+  max-width:520px;margin:0 auto 2.4rem;
+  animation:fadeUp .7s .16s ease both;
+}
+.hero-btns{display:flex;gap:.85rem;justify-content:center;flex-wrap:wrap;animation:fadeUp .7s .24s ease both}
+.btn-primary{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:linear-gradient(135deg,var(--primary-bright),var(--cyan));
+  color:#060810;font-family:var(--fb);font-weight:700;font-size:.92rem;
+  padding:.78rem 1.7rem;border-radius:var(--radius);border:none;cursor:pointer;
+  text-decoration:none;transition:opacity .2s,transform .2s;
+}
+.btn-primary:hover{opacity:.88;transform:translateY(-2px)}
+.btn-ghost{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:var(--surface2);border:1px solid var(--border2);
+  color:var(--text);font-family:var(--fb);font-weight:600;font-size:.92rem;
+  padding:.78rem 1.7rem;border-radius:var(--radius);cursor:pointer;
+  text-decoration:none;transition:background .2s,border-color .2s,transform .2s;
+}
+.btn-ghost:hover{background:var(--surface3);border-color:rgba(255,255,255,.1);transform:translateY(-2px)}
+
+/* url bar preview */
+.url-bar-preview{
+  margin-top:3rem;
+  background:var(--bg2);border:1px solid var(--border2);border-radius:14px;
+  overflow:hidden;animation:fadeUp .7s .32s ease both;
+  max-width:720px;margin-left:auto;margin-right:auto;
+}
+.url-bar-top{
+  display:flex;align-items:center;gap:.75rem;
+  padding:.8rem 1.1rem;background:rgba(255,255,255,.02);border-bottom:1px solid var(--border2);
+}
+.tdot{width:10px;height:10px;border-radius:50%}
+.tdot.r{background:#ff5f57}.tdot.y{background:#febc2e}.tdot.g{background:#28c840}
+.url-bar-input{
+  flex:1;background:rgba(255,255,255,.04);border:1px solid var(--border2);
+  color:var(--muted2);font-family:var(--fm);font-size:.75rem;
+  padding:.35rem .85rem;border-radius:6px;
+}
+.url-bar-go{
+  background:var(--primary-dim);border:1px solid rgba(99,102,241,.25);
+  color:var(--primary);font-family:var(--fm);font-size:.72rem;
+  padding:.35rem .75rem;border-radius:6px;cursor:pointer;
+}
+.url-results-preview{padding:1.2rem 1.4rem;text-align:left}
+.url-meta{display:flex;align-items:center;gap:.75rem;margin-bottom:.9rem}
+.url-type-badge{
+  background:var(--cyan-dim);border:1px solid rgba(34,211,238,.2);
+  color:var(--cyan);font-family:var(--fm);font-size:.68rem;
+  padding:.2rem .6rem;border-radius:4px;
+}
+.url-title-preview{font-family:var(--fh);font-weight:600;font-size:.92rem;color:var(--text);flex:1}
+.url-read-time{font-family:var(--fm);font-size:.68rem;color:var(--muted2)}
+.url-summary-preview{font-size:.82rem;color:var(--muted2);line-height:1.7;margin-bottom:.9rem}
+.url-points{display:flex;flex-direction:column;gap:.4rem}
+.url-point{display:flex;gap:.55rem;font-size:.78rem;color:var(--muted2)}
+.url-point::before{content:'→';color:var(--primary);flex-shrink:0}
+.url-tags{display:flex;gap:.4rem;margin-top:.9rem;flex-wrap:wrap}
+.url-tag{
+  background:var(--primary-dim);border:1px solid rgba(99,102,241,.18);
+  color:var(--primary);font-family:var(--fm);font-size:.66rem;
+  padding:.18rem .6rem;border-radius:4px;
+}
+
+/* ── FEATURES ─────────────────────────────────── */
+#features{position:relative;z-index:1;padding:5rem 2.5rem;border-top:1px solid var(--border2)}
+.section-wrap{max-width:1100px;margin:0 auto}
+.sec-label{font-family:var(--fm);font-size:.7rem;letter-spacing:.14em;color:var(--primary);text-transform:uppercase;margin-bottom:.55rem}
+.sec-title{font-family:var(--fh);font-size:clamp(1.7rem,3vw,2.4rem);font-weight:700;letter-spacing:-.02em;margin-bottom:.8rem}
+.sec-title em{font-style:italic;color:var(--primary)}
+.sec-sub{color:var(--muted2);font-size:.97rem;line-height:1.72;max-width:500px;margin-bottom:3rem}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1.1rem}
+.fc{
+  background:var(--surface2);border:1px solid var(--border2);
+  border-radius:var(--radius);padding:1.7rem;
+  transition:border-color .25s,transform .25s,background .25s;
+}
+.fc:hover{border-color:rgba(99,102,241,.2);background:rgba(99,102,241,.02);transform:translateY(-3px)}
+.fc-icon{
+  width:42px;height:42px;border-radius:9px;
+  background:var(--primary-dim);border:1px solid rgba(99,102,241,.18);
+  display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:1.1rem;
+}
+.fc h3{font-family:var(--fh);font-weight:600;font-size:.97rem;margin-bottom:.45rem}
+.fc p{font-size:.84rem;color:var(--muted2);line-height:1.65}
+
+/* ── TOOLS ─────────────────────────────────────── */
+#tools{position:relative;z-index:1;padding:5rem 2.5rem;border-top:1px solid var(--border2)}
+.tools-header{margin-bottom:2.5rem}
+.tab-bar{
+  display:flex;gap:.5rem;margin-bottom:2rem;
+  background:var(--surface2);border:1px solid var(--border2);
+  padding:.35rem;border-radius:10px;width:fit-content;
+}
+.tab-btn{
+  font-family:var(--fb);font-size:.85rem;font-weight:600;
+  padding:.55rem 1.3rem;border-radius:7px;border:none;
+  background:none;color:var(--muted2);cursor:pointer;
+  transition:all .2s;white-space:nowrap;
+}
+.tab-btn.active{background:var(--primary-dim);color:var(--primary);border:1px solid rgba(99,102,241,.28)}
+.tab-btn:hover:not(.active){color:var(--text);background:var(--surface3)}
+.tool-panel{display:none}
+.tool-panel.active{display:block;animation:fadeUp .3s ease}
+
+/* ── URL ANALYZER ─────────────────────────────── */
+.analyzer-layout{display:grid;grid-template-columns:1fr 1.2fr;gap:1.5rem;align-items:start}
+.panel-card{background:var(--bg2);border:1px solid var(--border2);border-radius:16px;overflow:hidden}
+.panel-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.9rem 1.3rem;border-bottom:1px solid var(--border2);
+  background:rgba(255,255,255,.02);
+}
+.panel-head-title{font-family:var(--fh);font-weight:600;font-size:.88rem;display:flex;align-items:center;gap:.5rem}
+.panel-body{padding:1.2rem}
+.form-label{display:block;font-size:.78rem;font-weight:600;color:var(--muted2);margin-bottom:.45rem;font-family:var(--fm)}
+.form-input,.form-textarea,.form-select{
+  width:100%;background:var(--bg3);border:1px solid var(--border2);
+  color:var(--text);font-family:var(--fb);font-size:.87rem;
+  padding:.65rem .9rem;border-radius:8px;outline:none;transition:border-color .2s;
+}
+.form-input:focus,.form-textarea:focus,.form-select:focus{border-color:rgba(99,102,241,.38)}
+.form-input::placeholder,.form-textarea::placeholder{color:var(--muted)}
+.form-textarea{min-height:80px;resize:vertical;line-height:1.55}
+.form-group{margin-bottom:1rem}
+.form-select option{background:var(--bg2)}
+
+.url-go-btn{
+  width:100%;margin-top:1rem;padding:.8rem;
+  background:linear-gradient(135deg,var(--primary-bright),var(--cyan));
+  border:none;border-radius:9px;
+  color:#060810;font-family:var(--fb);font-weight:700;font-size:.92rem;
+  cursor:pointer;transition:opacity .2s,transform .2s;
+  display:flex;align-items:center;justify-content:center;gap:.5rem;
+}
+.url-go-btn:hover{opacity:.87;transform:translateY(-1px)}
+.url-go-btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+
+/* quick url examples */
+.url-examples{margin-top:.85rem}
+.url-ex-label{font-family:var(--fm);font-size:.68rem;color:var(--muted2);margin-bottom:.45rem}
+.url-ex-pills{display:flex;flex-wrap:wrap;gap:.35rem}
+.url-ex-pill{
+  font-family:var(--fm);font-size:.68rem;padding:.25rem .65rem;
+  border-radius:5px;border:1px solid var(--border2);
+  background:none;color:var(--muted2);cursor:pointer;transition:all .18s;
+}
+.url-ex-pill:hover{color:var(--primary);border-color:rgba(99,102,241,.3);background:var(--primary-dim)}
+
+/* results card */
+.result-empty{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:300px;text-align:center;gap:.75rem;padding:2rem;
+}
+.result-empty .icon{font-size:2.5rem;opacity:.35}
+.result-empty p{font-size:.84rem;color:var(--muted2)}
+
+.analysis-result{}
+.analysis-header{padding:1.2rem;border-bottom:1px solid var(--border2)}
+.analysis-meta{display:flex;align-items:center;gap:.6rem;margin-bottom:.65rem;flex-wrap:wrap}
+.type-chip{
+  font-family:var(--fm);font-size:.66rem;padding:.22rem .65rem;border-radius:4px;
+  background:var(--cyan-dim);border:1px solid rgba(34,211,238,.2);color:var(--cyan);
+}
+.read-time{font-family:var(--fm);font-size:.68rem;color:var(--muted2)}
+.analysis-title{font-family:var(--fh);font-weight:700;font-size:1rem;color:var(--text);margin-bottom:.5rem;line-height:1.3}
+.analysis-url{font-family:var(--fm);font-size:.68rem;color:var(--muted2);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  display:block;max-width:100%;
+}
+.analysis-body{padding:1.1rem 1.2rem}
+.analysis-section-title{
+  font-family:var(--fm);font-size:.7rem;letter-spacing:.1em;
+  color:var(--primary);text-transform:uppercase;margin-bottom:.6rem;
+}
+.summary-text{font-size:.85rem;color:var(--muted2);line-height:1.72;margin-bottom:1.1rem}
+.key-points{display:flex;flex-direction:column;gap:.45rem;margin-bottom:1.1rem}
+.key-point{display:flex;gap:.6rem;font-size:.82rem;color:var(--text);align-items:flex-start}
+.kp-arrow{color:var(--primary);flex-shrink:0;margin-top:.05rem}
+.topic-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.1rem}
+.topic-tag{
+  background:var(--primary-dim);border:1px solid rgba(99,102,241,.2);
+  color:var(--primary);font-family:var(--fm);font-size:.67rem;
+  padding:.2rem .62rem;border-radius:4px;
+}
+.answer-box{
+  background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.18);
+  border-radius:9px;padding:.9rem 1rem;
+}
+.answer-label{font-family:var(--fm);font-size:.68rem;color:var(--primary);margin-bottom:.4rem;letter-spacing:.08em}
+.answer-text{font-size:.85rem;color:var(--text);line-height:1.7}
+
+/* ── AWS ARCHITECT ─────────────────────────────── */
+.arch-layout{display:grid;grid-template-columns:1fr 1.3fr;gap:1.5rem;align-items:start}
+.req-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.5rem}
+.req-tag{
+  display:flex;align-items:center;gap:.35rem;
+  background:var(--primary-dim);border:1px solid rgba(99,102,241,.2);
+  color:var(--primary);font-family:var(--fm);font-size:.72rem;
+  padding:.25rem .65rem;border-radius:5px;
+}
+.req-tag .remove-tag{cursor:pointer;opacity:.6;font-size:.85rem;transition:opacity .18s}
+.req-tag .remove-tag:hover{opacity:1}
+.req-input-row{display:flex;gap:.5rem;margin-top:.5rem}
+.req-add-input{
+  flex:1;background:var(--bg3);border:1px solid var(--border2);
+  color:var(--text);font-family:var(--fm);font-size:.78rem;
+  padding:.45rem .75rem;border-radius:7px;outline:none;transition:border-color .2s;
+}
+.req-add-input:focus{border-color:rgba(99,102,241,.35)}
+.req-add-input::placeholder{color:var(--muted)}
+.req-add-btn{
+  background:var(--primary-dim);border:1px solid rgba(99,102,241,.25);
+  color:var(--primary);font-family:var(--fm);font-size:.75rem;
+  padding:.45rem .85rem;border-radius:7px;cursor:pointer;transition:all .18s;white-space:nowrap;
+}
+.req-add-btn:hover{background:rgba(99,102,241,.2)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.arch-btn{
+  width:100%;margin-top:1rem;padding:.8rem;
+  background:linear-gradient(135deg,var(--primary-bright),var(--cyan));
+  border:none;border-radius:9px;
+  color:#060810;font-family:var(--fb);font-weight:700;font-size:.92rem;
+  cursor:pointer;transition:opacity .2s,transform .2s;
+}
+.arch-btn:hover{opacity:.87;transform:translateY(-1px)}
+.arch-btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+
+/* arch results */
+.arch-result{}
+.arch-header{padding:1.2rem;border-bottom:1px solid var(--border2)}
+.arch-name{font-family:var(--fh);font-weight:700;font-size:1.05rem;color:var(--text);margin-bottom:.5rem}
+.arch-overview{font-size:.83rem;color:var(--muted2);line-height:1.7}
+.arch-body{padding:1.1rem 1.2rem}
+.arch-section{margin-bottom:1.3rem}
+.arch-section-title{font-family:var(--fm);font-size:.7rem;letter-spacing:.1em;color:var(--primary);text-transform:uppercase;margin-bottom:.7rem}
+
+/* services table */
+.service-card{
+  background:rgba(255,255,255,.025);border:1px solid var(--border2);
+  border-radius:8px;padding:.8rem 1rem;margin-bottom:.5rem;
+  display:grid;grid-template-columns:1fr auto;align-items:start;gap:.75rem;
+}
+.service-name{font-family:var(--fh);font-weight:600;font-size:.88rem;color:var(--text);margin-bottom:.2rem}
+.service-purpose{font-size:.78rem;color:var(--muted2);line-height:1.5}
+.service-free{font-family:var(--fm);font-size:.67rem;color:var(--muted2);margin-top:.3rem}
+.service-cost{
+  text-align:right;flex-shrink:0;
+}
+.cost-badge{
+  font-family:var(--fm);font-size:.72rem;padding:.22rem .65rem;border-radius:4px;white-space:nowrap;
+}
+.cost-badge.free{background:var(--green-dim);border:1px solid rgba(52,211,153,.2);color:var(--green)}
+.cost-badge.low-cost{background:var(--yellow-dim);border:1px solid rgba(251,191,36,.2);color:var(--yellow)}
+.cost-badge.paid{background:var(--orange-dim);border:1px solid rgba(251,146,60,.2);color:var(--orange)}
+
+/* diagram flow */
+.flow-steps{display:flex;flex-direction:column;gap:.35rem}
+.flow-step{
+  display:flex;align-items:center;gap:.7rem;
+  font-size:.82rem;color:var(--text);padding:.55rem .85rem;
+  background:rgba(255,255,255,.02);border:1px solid var(--border2);border-radius:7px;
+}
+.flow-num{
+  width:22px;height:22px;border-radius:5px;
+  background:var(--primary-dim);border:1px solid rgba(99,102,241,.25);
+  color:var(--primary);font-family:var(--fm);font-size:.7rem;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.flow-connector{width:1px;height:8px;background:var(--border2);margin-left:11px}
+
+/* total & warnings */
+.total-row{
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.15);
+  border-radius:8px;padding:.75rem 1rem;margin-bottom:.9rem;
+}
+.total-label{font-family:var(--fm);font-size:.75rem;color:var(--muted2)}
+.total-val{font-family:var(--fh);font-weight:700;font-size:1rem;color:var(--primary)}
+.free-safe-badge{
+  font-family:var(--fm);font-size:.68rem;padding:.2rem .65rem;border-radius:4px;
+}
+.free-safe-badge.yes{background:var(--green-dim);color:var(--green);border:1px solid rgba(52,211,153,.2)}
+.free-safe-badge.no{background:var(--orange-dim);color:var(--orange);border:1px solid rgba(251,146,60,.2)}
+.warning-item{
+  display:flex;gap:.55rem;font-size:.78rem;color:var(--muted2);
+  margin-bottom:.45rem;align-items:flex-start;
+}
+.warning-icon{color:var(--yellow);flex-shrink:0}
+.iac-box{
+  background:rgba(34,211,238,.04);border:1px solid rgba(34,211,238,.12);
+  border-radius:8px;padding:.8rem 1rem;
+}
+.iac-label{font-family:var(--fm);font-size:.68rem;color:var(--cyan);margin-bottom:.35rem;letter-spacing:.08em}
+.iac-text{font-size:.8rem;color:var(--muted2);line-height:1.65}
+
+/* ── LOADING ──────────────────────────────────── */
+.loading-overlay{
+  position:absolute;inset:0;background:rgba(6,8,16,.78);
+  display:none;align-items:center;justify-content:center;
+  flex-direction:column;gap:.75rem;border-radius:16px;backdrop-filter:blur(4px);
+}
+.loading-overlay.visible{display:flex}
+.loading-spinner{
+  width:36px;height:36px;border:3px solid var(--border2);
+  border-top-color:var(--primary);border-radius:50%;
+  animation:spin .9s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-family:var(--fm);font-size:.78rem;color:var(--muted2)}
+
+/* ── TOAST ────────────────────────────────────── */
+.toast{
+  position:fixed;bottom:2rem;right:2rem;z-index:200;
+  padding:.8rem 1.2rem;border-radius:10px;font-size:.84rem;
+  max-width:340px;display:none;animation:fadeUp .3s ease;
+}
+.toast.error{background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.3);color:#fca5a5}
+.toast.success{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.3);color:#6ee7b7}
+.toast.visible{display:block}
+
+/* ── FOOTER ───────────────────────────────────── */
+footer{
+  position:relative;z-index:1;border-top:1px solid var(--border2);
+  padding:1.8rem 2.5rem;display:flex;align-items:center;
+  justify-content:space-between;flex-wrap:wrap;gap:1rem;
+}
+.foot-logo{font-family:var(--fh);font-weight:800;font-size:.95rem}
+.foot-logo .accent{color:var(--primary)}
+footer p{font-size:.78rem;color:var(--muted2)}
+footer a{color:var(--muted2);text-decoration:none;transition:color .2s}
+footer a:hover{color:var(--primary)}
+
+/* ── UTILS ────────────────────────────────────── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.divider{border:none;border-top:1px solid var(--border2);margin:0}
+
+@media(max-width:900px){
+  nav{padding:.8rem 1.2rem}
+  .nav-links{display:none}
+  .hero{padding:6rem 1.2rem 3rem}
+  .analyzer-layout,.arch-layout{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
+  #features,#tools{padding:3rem 1.2rem}
+  footer{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">
+    <div class="logo-icon">🔭</div>
+    Web<span>Lens</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#tools">Tools</a></li>
+    <li><a href="#tools" class="nav-cta">Launch App →</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="badge"><span class="badge-dot"></span> AI Web Intelligence · AWS Architecture</div>
+    <h1>See the web.<br/><span class="grad">Build on the cloud.</span></h1>
+    <p class="hero-sub">
+      Paste any URL and get instant AI-powered analysis — summaries, key insights, Q&amp;A.
+      Describe your project and get a tailored AWS architecture with real cost estimates.
+    </p>
+    <div class="hero-btns">
+      <a href="#tools" class="btn-primary">🔭 Analyze a URL</a>
+      <a href="#tools" class="btn-ghost" id="heroArchBtn">☁️ AWS Architect →</a>
+    </div>
+
+    <!-- URL bar preview -->
+    <div class="url-bar-preview">
+      <div class="url-bar-top">
+        <div class="tdot r"></div><div class="tdot y"></div><div class="tdot g"></div>
+        <div class="url-bar-input">https://docs.aws.amazon.com/ec2/latest/userguide</div>
+        <div class="url-bar-go">Analyze →</div>
+      </div>
+      <div class="url-results-preview">
+        <div class="url-meta">
+          <span class="url-type-badge">documentation</span>
+          <span class="url-title-preview">Amazon EC2 User Guide — AWS Documentation</span>
+          <span class="url-read-time">~12 min read</span>
+        </div>
+        <div class="url-summary-preview">
+          Amazon EC2 provides scalable computing capacity in the cloud. The guide covers instance types,
+          security groups, key pairs, and lifecycle management. EC2 integrates with S3, RDS, IAM, and VPC
+          to form the backbone of most AWS architectures.
+        </div>
+        <div class="url-points">
+          <div class="url-point">t2.micro is free-tier eligible for 750 hrs/month</div>
+          <div class="url-point">Security groups act as virtual firewalls for your instances</div>
+          <div class="url-point">Auto Scaling adjusts capacity based on defined conditions</div>
+        </div>
+        <div class="url-tags">
+          <span class="url-tag">AWS</span>
+          <span class="url-tag">EC2</span>
+          <span class="url-tag">Cloud Computing</span>
+          <span class="url-tag">Infrastructure</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="section-wrap">
+    <div class="sec-label">01 · Features</div>
+    <h2 class="sec-title">Two tools, <em>endless use</em></h2>
+    <p class="sec-sub">Analyze any webpage with AI. Design AWS architectures with real cost awareness.</p>
+    <div class="features-grid">
+      <div class="fc"><div class="fc-icon">🌐</div><h3>URL Analyzer</h3><p>Paste any URL — articles, docs, GitHub repos, Stack Overflow threads. Get a structured summary, key points, and ask follow-up questions about the content.</p></div>
+      <div class="fc"><div class="fc-icon">💬</div><h3>Ask Questions</h3><p>Don't just get a summary — ask specific questions about the page. "What are the API rate limits?" or "Does this support Python 3.11?" answered instantly.</p></div>
+      <div class="fc"><div class="fc-icon">☁️</div><h3>AWS Architect</h3><p>Describe what you want to build and get a complete AWS service stack with data flow diagram, free-tier analysis, and monthly cost estimates.</p></div>
+      <div class="fc"><div class="fc-icon">💰</div><h3>Free Tier Aware</h3><p>Every AWS recommendation is tagged as Free, Low-Cost, or Paid. Get warned about services that could surprise you with charges after the free tier ends.</p></div>
+      <div class="fc"><div class="fc-icon">🏗️</div><h3>Architecture Flow</h3><p>See the data flow as a step-by-step diagram — from user request through CDN, load balancer, compute, database, and storage — specific to your use case.</p></div>
+      <div class="fc"><div class="fc-icon">⚡</div><h3>Groq Speed</h3><p>Both tools powered by Llama 3.3 70B via Groq. Real-time URL fetch + AI analysis in under 4 seconds. Architecture advice in under 2 seconds.</p></div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- TOOLS -->
+<section id="tools">
+  <div class="section-wrap">
+    <div class="tools-header">
+      <div class="sec-label">02 · Tools</div>
+      <h2 class="sec-title">Choose your <em>lens</em></h2>
+    </div>
+
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab('analyzer',this)">🔭 URL Analyzer</button>
+      <button class="tab-btn" onclick="switchTab('architect',this)">☁️ AWS Architect</button>
+    </div>
+
+    <!-- URL ANALYZER -->
+    <div class="tool-panel active" id="panel-analyzer">
+      <div class="analyzer-layout">
+        <!-- input -->
+        <div class="panel-card">
+          <div class="panel-head">
+            <div class="panel-head-title">🌐 Enter a URL</div>
+          </div>
+          <div class="panel-body">
+            <div class="form-group">
+              <label class="form-label">URL to Analyze</label>
+              <input id="urlInput" class="form-input" type="url" placeholder="https://..." oninput="updateUrlHint()"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Your Question (optional)</label>
+              <textarea id="urlQuery" class="form-textarea" placeholder="Leave blank for a full summary, or ask something specific:&#10;&#10;• What are the main arguments?&#10;• Does this support TypeScript?&#10;• What pricing tier is recommended?"></textarea>
+            </div>
+            <button class="url-go-btn" id="analyzeBtn" onclick="runAnalyze()">
+              <span id="analyzeBtnText">🔭 Analyze URL</span>
+            </button>
+            <div class="url-examples">
+              <div class="url-ex-label">Try an example:</div>
+              <div class="url-ex-pills">
+                <button class="url-ex-pill" onclick="setUrl('https://github.com/TechnoDream956/AI-Chatbot')">GitHub Repo</button>
+                <button class="url-ex-pill" onclick="setUrl('https://docs.python.org/3/library/asyncio.html')">Python Docs</button>
+                <button class="url-ex-pill" onclick="setUrl('https://aws.amazon.com/free/')">AWS Free Tier</button>
+                <button class="url-ex-pill" onclick="setUrl('https://vercel.com/docs')">Vercel Docs</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- results -->
+        <div class="panel-card" style="position:relative">
+          <div class="panel-head">
+            <div class="panel-head-title">📊 Analysis</div>
+          </div>
+          <div id="analyzeResults">
+            <div class="result-empty">
+              <div class="icon">🔭</div>
+              <p>Enter a URL and click<br/>"Analyze URL" to get started.</p>
+            </div>
+          </div>
+          <div class="loading-overlay" id="analyzeLoader">
+            <div class="loading-spinner"></div>
+            <div class="loading-text" id="analyzeLoadText">Fetching page...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AWS ARCHITECT -->
+    <div class="tool-panel" id="panel-architect">
+      <div class="arch-layout">
+        <!-- form -->
+        <div class="panel-card">
+          <div class="panel-head">
+            <div class="panel-head-title">☁️ Describe Your Project</div>
+          </div>
+          <div class="panel-body">
+            <div class="form-group">
+              <label class="form-label">Project Description *</label>
+              <textarea id="archDesc" class="form-textarea" placeholder="e.g. A REST API backend for a social app with 10k daily users. Needs user authentication, image uploads, notifications, and a PostgreSQL database."></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Requirements / Features</label>
+              <div class="req-tags" id="reqTags"></div>
+              <div class="req-input-row">
+                <input id="reqInput" class="req-add-input" placeholder="e.g. auto-scaling" onkeydown="reqKeydown(event)"/>
+                <button class="req-add-btn" onclick="addReq()">+ Add</button>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Budget</label>
+                <select id="archBudget" class="form-select">
+                  <option value="free tier">Free Tier Only</option>
+                  <option value="under $10/month">Under $10/mo</option>
+                  <option value="under $50/month">Under $50/mo</option>
+                  <option value="flexible">Flexible</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Scale</label>
+                <select id="archScale" class="form-select">
+                  <option value="small">Small (hobby/student)</option>
+                  <option value="medium">Medium (startup)</option>
+                  <option value="large">Large (production)</option>
+                </select>
+              </div>
+            </div>
+            <button class="arch-btn" id="archBtn" onclick="runArchitect()">☁️ Design Architecture</button>
+          </div>
+        </div>
+
+        <!-- results -->
+        <div class="panel-card" style="position:relative">
+          <div class="panel-head">
+            <div class="panel-head-title">🏗️ Architecture Plan</div>
+          </div>
+          <div id="archResults">
+            <div class="result-empty">
+              <div class="icon">☁️</div>
+              <p>Describe your project and click<br/>"Design Architecture" to get started.</p>
+            </div>
+          </div>
+          <div class="loading-overlay" id="archLoader">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Designing architecture...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-logo">Web<span class="accent">Lens</span></div>
+  <p>Built by <a href="https://my-portfolio-steel-nu-70.vercel.app" target="_blank">Arpit Sehrawat</a> · Bennett University</p>
+  <p><a href="https://github.com/TechnoDream956" target="_blank">GitHub ↗</a></p>
+</footer>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── STATE ──────────────────────────────────────────────
+let requirements = [];
+
+// ── TAB SWITCHING ──────────────────────────────────────
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tool-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('panel-' + name).classList.add('active');
+}
+document.getElementById('heroArchBtn').addEventListener('click', function(e) {
+  e.preventDefault();
+  switchTab('architect', document.querySelectorAll('.tab-btn')[1]);
+  setTimeout(() => document.getElementById('tools').scrollIntoView({behavior:'smooth'}), 50);
+});
+
+// ── TOAST ──────────────────────────────────────────────
+function showToast(msg, type = 'error') {
+  const t = document.getElementById('toast');
+  t.textContent = (type === 'error' ? '⚠ ' : '✓ ') + msg;
+  t.className = `toast ${type} visible`;
+  setTimeout(() => t.classList.remove('visible'), 4500);
+}
+
+// ── URL EXAMPLES ───────────────────────────────────────
+function setUrl(url) {
+  document.getElementById('urlInput').value = url;
+  document.getElementById('urlInput').focus();
+}
+
+// ── REQUIREMENTS ──────────────────────────────────────
+function renderReqs() {
+  document.getElementById('reqTags').innerHTML = requirements.map((r, i) =>
+    `<div class="req-tag">${esc(r)}<span class="remove-tag" onclick="removeReq(${i})">✕</span></div>`
+  ).join('');
+}
+function addReq() {
+  const v = document.getElementById('reqInput').value.trim();
+  if (!v || requirements.includes(v)) return;
+  requirements.push(v);
+  document.getElementById('reqInput').value = '';
+  renderReqs();
+}
+function removeReq(i) { requirements.splice(i, 1); renderReqs(); }
+function reqKeydown(e) { if (e.key === 'Enter') { e.preventDefault(); addReq(); } }
+
+// ── RENDER URL ANALYSIS ────────────────────────────────
+function renderAnalysis(data) {
+  const hasAnswer = data.answer && data.answer !== 'null' && data.answer !== null;
+
+  const keyPoints = (data.key_points || []).map(p =>
+    `<div class="key-point"><span class="kp-arrow">→</span><span>${esc(p)}</span></div>`
+  ).join('');
+
+  const topicTags = (data.topics || []).map(t =>
+    `<span class="topic-tag">${esc(t)}</span>`
+  ).join('');
+
+  const answerBlock = hasAnswer ? `
+    <div class="answer-box">
+      <div class="answer-label">YOUR ANSWER</div>
+      <div class="answer-text">${esc(data.answer)}</div>
+    </div>` : '';
+
+  document.getElementById('analyzeResults').innerHTML = `
+    <div class="analysis-result">
+      <div class="analysis-header">
+        <div class="analysis-meta">
+          <span class="type-chip">${esc(data.type || 'webpage')}</span>
+          <span class="read-time">${esc(data.read_time || '')}</span>
+        </div>
+        <div class="analysis-title">${esc(data.title || 'Page Analysis')}</div>
+        <a class="analysis-url" href="${esc(data.url)}" target="_blank">${esc(data.url)}</a>
+      </div>
+      <div class="analysis-body">
+        ${hasAnswer ? `<div class="arch-section">${answerBlock}</div>` : ''}
+        <div class="arch-section">
+          <div class="analysis-section-title">Summary</div>
+          <div class="summary-text">${esc(data.summary || '')}</div>
+        </div>
+        ${keyPoints ? `<div class="arch-section">
+          <div class="analysis-section-title">Key Points</div>
+          <div class="key-points">${keyPoints}</div>
+        </div>` : ''}
+        ${topicTags ? `<div class="arch-section">
+          <div class="analysis-section-title">Topics</div>
+          <div class="topic-tags">${topicTags}</div>
+        </div>` : ''}
+      </div>
+    </div>`;
+}
+
+// ── RUN URL ANALYSIS ───────────────────────────────────
+async function runAnalyze() {
+  const url = document.getElementById('urlInput').value.trim();
+  const query = document.getElementById('urlQuery').value.trim();
+  if (!url) return showToast('Please enter a URL.');
+
+  const btn = document.getElementById('analyzeBtn');
+  const loader = document.getElementById('analyzeLoader');
+  const loadText = document.getElementById('analyzeLoadText');
+  btn.disabled = true;
+  document.getElementById('analyzeBtnText').textContent = 'Analyzing...';
+  loader.classList.add('visible');
+
+  // Cycle loading messages
+  const msgs = ['Fetching page...', 'Cleaning content...', 'Analyzing with AI...', 'Extracting insights...'];
+  let mi = 0;
+  const msgInterval = setInterval(() => { loadText.textContent = msgs[++mi % msgs.length]; }, 1800);
+
+  try {
+    const res = await fetch('/api/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url, query: query || 'summarize' })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || `Error ${res.status}`);
+    renderAnalysis(data);
+  } catch (err) {
+    showToast(err.message || 'Something went wrong.');
+    document.getElementById('analyzeResults').innerHTML = `<div class="result-empty"><div class="icon">⚠️</div><p>${esc(err.message)}</p></div>`;
+  } finally {
+    clearInterval(msgInterval);
+    btn.disabled = false;
+    document.getElementById('analyzeBtnText').textContent = '🔭 Analyze URL';
+    loader.classList.remove('visible');
+  }
+}
+
+// ── RENDER AWS ARCHITECTURE ────────────────────────────
+function renderArch(data) {
+  const services = (data.services || []).map(s => {
+    const tierClass = s.tier === 'free' ? 'free' : s.tier === 'low-cost' ? 'low-cost' : 'paid';
+    const tierLabel = s.tier === 'free' ? '✓ Free' : s.tier === 'low-cost' ? '~ Low Cost' : '$ Paid';
+    return `<div class="service-card">
+      <div>
+        <div class="service-name">${esc(s.name)}</div>
+        <div class="service-purpose">${esc(s.purpose)}</div>
+        ${s.free_tier && s.free_tier !== 'N/A' ? `<div class="service-free">Free tier: ${esc(s.free_tier)}</div>` : ''}
+      </div>
+      <div class="service-cost">
+        <div class="cost-badge ${tierClass}">${tierLabel}</div>
+        <div style="font-family:var(--fm);font-size:.67rem;color:var(--muted2);margin-top:.3rem;text-align:right">${esc(s.monthly_estimate)}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  const flowSteps = (data.diagram_steps || []).map((step, i) => `
+    ${i > 0 ? '<div class="flow-connector"></div>' : ''}
+    <div class="flow-step">
+      <div class="flow-num">${i + 1}</div>
+      <span>${esc(step)}</span>
+    </div>`).join('');
+
+  const warnings = (data.warnings || []).map(w =>
+    `<div class="warning-item"><span class="warning-icon">⚠</span><span>${esc(w)}</span></div>`
+  ).join('');
+
+  const freeSafe = data.free_tier_safe;
+
+  document.getElementById('archResults').innerHTML = `
+    <div class="arch-result">
+      <div class="arch-header">
+        <div class="arch-name">${esc(data.architecture_name || 'AWS Architecture')}</div>
+        <div class="arch-overview">${esc(data.overview || '')}</div>
+      </div>
+      <div class="arch-body">
+        <div class="total-row">
+          <div>
+            <div class="total-label">ESTIMATED MONTHLY COST</div>
+            <div class="total-val">${esc(data.total_estimate || 'See breakdown')}</div>
+          </div>
+          <span class="free-safe-badge ${freeSafe ? 'yes' : 'no'}">
+            ${freeSafe ? '✓ Free Tier Safe' : '⚠ May exceed free tier'}
+          </span>
+        </div>
+        <div class="arch-section">
+          <div class="arch-section-title">AWS Services</div>
+          ${services}
+        </div>
+        <div class="arch-section">
+          <div class="arch-section-title">Data Flow</div>
+          <div class="flow-steps">${flowSteps}</div>
+        </div>
+        ${warnings ? `<div class="arch-section">
+          <div class="arch-section-title">⚠ Watch Out</div>
+          ${warnings}
+        </div>` : ''}
+        ${data.iac_hint ? `<div class="arch-section">
+          <div class="iac-box">
+            <div class="iac-label">TERRAFORM / CLOUDFORMATION TIP</div>
+            <div class="iac-text">${esc(data.iac_hint)}</div>
+          </div>
+        </div>` : ''}
+      </div>
+    </div>`;
+}
+
+// ── RUN AWS ARCHITECT ──────────────────────────────────
+async function runArchitect() {
+  const description = document.getElementById('archDesc').value.trim();
+  if (!description) return showToast('Please describe your project.');
+
+  const btn = document.getElementById('archBtn');
+  const loader = document.getElementById('archLoader');
+  btn.disabled = true;
+  btn.textContent = 'Designing...';
+  loader.classList.add('visible');
+
+  try {
+    const res = await fetch('/api/architect', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        description,
+        requirements,
+        budget: document.getElementById('archBudget').value,
+        scale: document.getElementById('archScale').value
+      })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || `Error ${res.status}`);
+    renderArch(data);
+  } catch (err) {
+    showToast(err.message || 'Something went wrong.');
+    document.getElementById('archResults').innerHTML = `<div class="result-empty"><div class="icon">⚠️</div><p>${esc(err.message)}</p></div>`;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '☁️ Design Architecture';
+    loader.classList.remove('visible');
+  }
+}
+
+// ── UTILITY ────────────────────────────────────────────
+function esc(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>
