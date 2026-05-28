@@ -3,21 +3,18 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>WebLens — URL Analyzer & AWS Architect AI</title>
-<meta name="description" content="Paste any URL and get instant AI analysis. Describe your project and get a tailored AWS architecture with cost estimates."/>
+<title>DevForge — AI Code Review & DevOps Generator</title>
+<meta name="description" content="AI-powered code review and DevOps config generator. Instant feedback on your code, production-ready Dockerfiles and CI/CD pipelines."/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
 
 <!-- NAV -->
 <nav>
-  <a href="#" class="logo">
-    <div class="logo-icon">🔭</div>
-    Web<span>Lens</span>
-  </a>
+  <a href="#" class="logo"><span class="bracket">{</span> DevForge <span class="bracket">}</span></a>
   <ul class="nav-links">
     <li><a href="#features">Features</a></li>
     <li><a href="#tools">Tools</a></li>
@@ -26,52 +23,45 @@
 </nav>
 
 <!-- HERO -->
-<section class="hero">
-  <div class="hero-inner">
-    <div class="badge"><span class="badge-dot"></span> AI Web Intelligence · AWS Architecture</div>
-    <h1>See the web.<br/><span class="grad">Build on the cloud.</span></h1>
+<div class="hero">
+  <div class="hero-left">
+    <div class="badge"><span class="badge-dot"></span> AI-Powered Developer Tools</div>
+    <h1>Review. Generate.<br/><span class="highlight">Ship Faster.</span></h1>
     <p class="hero-sub">
-      Paste any URL and get instant AI-powered analysis — summaries, key insights, Q&amp;A.
-      Describe your project and get a tailored AWS architecture with real cost estimates.
+      Instant AI code review with actionable fixes. Production-ready Dockerfiles,
+      docker-compose, and GitHub Actions CI/CD — generated from a single description.
     </p>
     <div class="hero-btns">
-      <a href="#tools" class="btn-primary">🔭 Analyze a URL</a>
-      <a href="#tools" class="btn-ghost" id="heroArchBtn">☁️ AWS Architect →</a>
+      <a href="#tools" class="btn-primary">🔍 Review My Code</a>
+      <a href="#tools" class="btn-ghost" id="heroGenBtn">⚙️ Generate DevOps</a>
     </div>
+  </div>
 
-    <!-- URL bar preview -->
-    <div class="url-bar-preview">
-      <div class="url-bar-top">
+  <div class="hero-right">
+    <div class="hero-terminal">
+      <div class="term-bar">
         <div class="tdot r"></div><div class="tdot y"></div><div class="tdot g"></div>
-        <div class="url-bar-input">https://docs.aws.amazon.com/ec2/latest/userguide</div>
-        <div class="url-bar-go">Analyze →</div>
+        <span class="term-title">devforge — review</span>
       </div>
-      <div class="url-results-preview">
-        <div class="url-meta">
-          <span class="url-type-badge">documentation</span>
-          <span class="url-title-preview">Amazon EC2 User Guide — AWS Documentation</span>
-          <span class="url-read-time">~12 min read</span>
-        </div>
-        <div class="url-summary-preview">
-          Amazon EC2 provides scalable computing capacity in the cloud. The guide covers instance types,
-          security groups, key pairs, and lifecycle management. EC2 integrates with S3, RDS, IAM, and VPC
-          to form the backbone of most AWS architectures.
-        </div>
-        <div class="url-points">
-          <div class="url-point">t2.micro is free-tier eligible for 750 hrs/month</div>
-          <div class="url-point">Security groups act as virtual firewalls for your instances</div>
-          <div class="url-point">Auto Scaling adjusts capacity based on defined conditions</div>
-        </div>
-        <div class="url-tags">
-          <span class="url-tag">AWS</span>
-          <span class="url-tag">EC2</span>
-          <span class="url-tag">Cloud Computing</span>
-          <span class="url-tag">Infrastructure</span>
-        </div>
+      <div class="term-body">
+        <div class="tl"><span class="tp">$</span><span class="tc"> devforge review app.py --lang=python</span></div>
+        <div class="tl to">  Analyzing 84 lines...</div>
+        <div class="tl to tg">  ✓ Parse complete</div>
+        <div class="tl to">&nbsp;</div>
+        <div class="tl to">  Score: <span style="color:var(--primary)">78 / 100</span>  Grade: <span style="color:var(--primary)">B+</span></div>
+        <div class="tl to">&nbsp;</div>
+        <div class="tl to tr2">  ✗ Line 23 [CRITICAL]  SQL injection risk</div>
+        <div class="tl to tw">  ⚠ Line 8  [WARNING]   Unused import 'os'</div>
+        <div class="tl to" style="color:var(--blue)">  ℹ Line 41 [INFO]      Magic number: use constant</div>
+        <div class="tl to tg">  ✓ Strong: Exception handling present</div>
+        <div class="tl to tg">  ✓ Strong: Consistent naming conventions</div>
+        <div class="tl to">&nbsp;</div>
+        <div class="tl to" style="color:var(--muted2)">  3 issues · 2 strengths · Security: 45/100</div>
+        <div class="tl"><span class="tp">$</span><span class="tc"> <span class="tcursor"></span></span></div>
       </div>
     </div>
   </div>
-</section>
+</div>
 
 <hr class="divider"/>
 
@@ -79,15 +69,15 @@
 <section id="features">
   <div class="section-wrap">
     <div class="sec-label">01 · Features</div>
-    <h2 class="sec-title">Two tools, <em>endless use</em></h2>
-    <p class="sec-sub">Analyze any webpage with AI. Design AWS architectures with real cost awareness.</p>
+    <h2 class="sec-title">What <em>DevForge</em> does</h2>
+    <p class="sec-sub">Two powerful tools. Paste code or describe your app — DevForge handles the rest.</p>
     <div class="features-grid">
-      <div class="fc"><div class="fc-icon">🌐</div><h3>URL Analyzer</h3><p>Paste any URL — articles, docs, GitHub repos, Stack Overflow threads. Get a structured summary, key points, and ask follow-up questions about the content.</p></div>
-      <div class="fc"><div class="fc-icon">💬</div><h3>Ask Questions</h3><p>Don't just get a summary — ask specific questions about the page. "What are the API rate limits?" or "Does this support Python 3.11?" answered instantly.</p></div>
-      <div class="fc"><div class="fc-icon">☁️</div><h3>AWS Architect</h3><p>Describe what you want to build and get a complete AWS service stack with data flow diagram, free-tier analysis, and monthly cost estimates.</p></div>
-      <div class="fc"><div class="fc-icon">💰</div><h3>Free Tier Aware</h3><p>Every AWS recommendation is tagged as Free, Low-Cost, or Paid. Get warned about services that could surprise you with charges after the free tier ends.</p></div>
-      <div class="fc"><div class="fc-icon">🏗️</div><h3>Architecture Flow</h3><p>See the data flow as a step-by-step diagram — from user request through CDN, load balancer, compute, database, and storage — specific to your use case.</p></div>
-      <div class="fc"><div class="fc-icon">⚡</div><h3>Groq Speed</h3><p>Both tools powered by Llama 3.3 70B via Groq. Real-time URL fetch + AI analysis in under 4 seconds. Architecture advice in under 2 seconds.</p></div>
+      <div class="fc"><div class="fc-icon">🔍</div><h3>Deep Code Review</h3><p>Detects bugs, security vulnerabilities, performance issues, and style problems. Each issue comes with an exact fix — not generic advice.</p></div>
+      <div class="fc"><div class="fc-icon">📊</div><h3>Scored & Graded</h3><p>Every review gets an overall score (0–100), a letter grade, and three sub-scores: Security, Performance, and Readability.</p></div>
+      <div class="fc"><div class="fc-icon">🐳</div><h3>Dockerfile Generator</h3><p>Describe your app and get a production-quality multi-stage Dockerfile with health checks, proper caching, and non-root user setup.</p></div>
+      <div class="fc"><div class="fc-icon">🔄</div><h3>CI/CD Pipeline</h3><p>Full GitHub Actions workflow targeting AWS ECR + deployment. Push-to-deploy pipeline generated from your stack description.</p></div>
+      <div class="fc"><div class="fc-icon">📦</div><h3>docker-compose.yml</h3><p>Multi-service compose files with proper networks, volumes, environment variables, and depends_on ordering.</p></div>
+      <div class="fc"><div class="fc-icon">⚡</div><h3>Powered by Groq</h3><p>Llama 3.3 70B running on Groq's inference engine. Results in under 3 seconds — fast enough to use in your actual workflow.</p></div>
     </div>
   </div>
 </section>
@@ -99,123 +89,153 @@
   <div class="section-wrap">
     <div class="tools-header">
       <div class="sec-label">02 · Tools</div>
-      <h2 class="sec-title">Choose your <em>lens</em></h2>
+      <h2 class="sec-title">Pick your <em>weapon</em></h2>
     </div>
 
     <div class="tab-bar">
-      <button class="tab-btn active" onclick="switchTab('analyzer',this)">🔭 URL Analyzer</button>
-      <button class="tab-btn" onclick="switchTab('architect',this)">☁️ AWS Architect</button>
+      <button class="tab-btn active" onclick="switchTab('review',this)">🔍 Code Review</button>
+      <button class="tab-btn" onclick="switchTab('generate',this)">⚙️ DevOps Generator</button>
     </div>
 
-    <!-- URL ANALYZER -->
-    <div class="tool-panel active" id="panel-analyzer">
-      <div class="analyzer-layout">
-        <!-- input -->
+    <!-- CODE REVIEW PANEL -->
+    <div class="tool-panel active" id="panel-review">
+      <div class="review-layout">
+        <!-- Input -->
         <div class="panel-card">
           <div class="panel-head">
-            <div class="panel-head-title">🌐 Enter a URL</div>
+            <div class="panel-head-title">📋 Paste Your Code</div>
           </div>
           <div class="panel-body">
-            <div class="form-group">
-              <label class="form-label">URL to Analyze</label>
-              <input id="urlInput" class="form-input" type="url" placeholder="https://..." oninput="updateUrlHint()"/>
+            <div class="lang-grid" id="langGrid">
+              <button class="lang-chip active" data-lang="Python" onclick="selectLang(this)">Python</button>
+              <button class="lang-chip" data-lang="JavaScript" onclick="selectLang(this)">JavaScript</button>
+              <button class="lang-chip" data-lang="TypeScript" onclick="selectLang(this)">TypeScript</button>
+              <button class="lang-chip" data-lang="Java" onclick="selectLang(this)">Java</button>
+              <button class="lang-chip" data-lang="Go" onclick="selectLang(this)">Go</button>
+              <button class="lang-chip" data-lang="Rust" onclick="selectLang(this)">Rust</button>
+              <button class="lang-chip" data-lang="C++" onclick="selectLang(this)">C++</button>
+              <button class="lang-chip" data-lang="SQL" onclick="selectLang(this)">SQL</button>
+              <button class="lang-chip" data-lang="Bash" onclick="selectLang(this)">Bash</button>
+              <button class="lang-chip" data-lang="Other" onclick="selectLang(this)">Other</button>
             </div>
-            <div class="form-group">
-              <label class="form-label">Your Question (optional)</label>
-              <textarea id="urlQuery" class="form-textarea" placeholder="Leave blank for a full summary, or ask something specific:&#10;&#10;• What are the main arguments?&#10;• Does this support TypeScript?&#10;• What pricing tier is recommended?"></textarea>
-            </div>
-            <button class="url-go-btn" id="analyzeBtn" onclick="runAnalyze()">
-              <span id="analyzeBtnText">🔭 Analyze URL</span>
-            </button>
-            <div class="url-examples">
-              <div class="url-ex-label">Try an example:</div>
-              <div class="url-ex-pills">
-                <button class="url-ex-pill" onclick="setUrl('https://github.com/TechnoDream956/web-lens')">GitHub Repo</button>
-                <button class="url-ex-pill" onclick="setUrl('https://docs.python.org/3/library/asyncio.html')">Python Docs</button>
-                <button class="url-ex-pill" onclick="setUrl('https://aws.amazon.com/free/')">AWS Free Tier</button>
-                <button class="url-ex-pill" onclick="setUrl('https://vercel.com/docs')">Vercel Docs</button>
+            <div class="code-editor-wrap">
+              <div class="code-editor-header">
+                <span class="editor-lang-badge" id="editorLangBadge">python</span>
+                <span class="editor-hint">Tab = 2 spaces</span>
               </div>
+              <textarea id="codeInput" class="code-editor" placeholder="# Paste your code here...
+# DevForge will review it for bugs, security issues,
+# performance problems, and style improvements.
+
+def example():
+    password = &quot;admin123&quot;
+    query = f&quot;SELECT * FROM users WHERE name = '{input()}'&quot;
+    return query" spellcheck="false"></textarea>
+            </div>
+            <div class="review-btn-wrap">
+              <button class="review-btn" id="reviewBtn" onclick="runReview()">
+                <span id="reviewBtnText">🔍 Review Code</span>
+              </button>
             </div>
           </div>
         </div>
 
-        <!-- results -->
+        <!-- Results -->
         <div class="panel-card" style="position:relative">
           <div class="panel-head">
-            <div class="panel-head-title">📊 Analysis</div>
+            <div class="panel-head-title">📊 Review Results</div>
+            <span id="resultGrade" style="font-family:var(--fm);font-size:.75rem;color:var(--muted2)"></span>
           </div>
-          <div id="analyzeResults">
+          <div id="reviewResults">
             <div class="result-empty">
-              <div class="icon">🔭</div>
-              <p>Enter a URL and click<br/>"Analyze URL" to get started.</p>
+              <div class="icon">🎯</div>
+              <p>Paste your code and click<br/>"Review Code" to get started.</p>
             </div>
           </div>
-          <div class="loading-overlay" id="analyzeLoader">
+          <div class="loading-overlay" id="reviewLoader">
             <div class="loading-spinner"></div>
-            <div class="loading-text" id="analyzeLoadText">Fetching page...</div>
+            <div class="loading-text">Analyzing your code...</div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- AWS ARCHITECT -->
-    <div class="tool-panel" id="panel-architect">
-      <div class="arch-layout">
-        <!-- form -->
-        <div class="panel-card">
+    <!-- DEVOPS GENERATOR PANEL -->
+    <div class="tool-panel" id="panel-generate">
+      <div class="gen-layout">
+        <!-- Form -->
+        <div class="gen-form">
           <div class="panel-head">
-            <div class="panel-head-title">☁️ Describe Your Project</div>
+            <div class="panel-head-title">📝 Describe Your App</div>
           </div>
           <div class="panel-body">
             <div class="form-group">
-              <label class="form-label">Project Description *</label>
-              <textarea id="archDesc" class="form-textarea" placeholder="e.g. A REST API backend for a social app with 10k daily users. Needs user authentication, image uploads, notifications, and a PostgreSQL database."></textarea>
+              <label class="form-label">App Description *</label>
+              <textarea id="appDesc" class="form-textarea" placeholder="e.g. Flask REST API with PostgreSQL database, runs on port 5000, deployed to AWS EC2. Uses Redis for caching."></textarea>
             </div>
-            <div class="form-group">
-              <label class="form-label">Requirements / Features</label>
-              <div class="req-tags" id="reqTags"></div>
-              <div class="req-input-row">
-                <input id="reqInput" class="req-add-input" placeholder="e.g. auto-scaling" onkeydown="reqKeydown(event)"/>
-                <button class="req-add-btn" onclick="addReq()">+ Add</button>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Language / Runtime</label>
+                <select id="appLang" class="form-select">
+                  <option>Python</option>
+                  <option>Node.js</option>
+                  <option>Java</option>
+                  <option>Go</option>
+                  <option>Rust</option>
+                  <option>Ruby</option>
+                  <option>PHP</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Framework</label>
+                <input id="appFramework" class="form-input" placeholder="e.g. Flask, Express, Spring"/>
               </div>
             </div>
             <div class="form-row">
               <div class="form-group">
-                <label class="form-label">Budget</label>
-                <select id="archBudget" class="form-select">
-                  <option value="free tier">Free Tier Only</option>
-                  <option value="under $10/month">Under $10/mo</option>
-                  <option value="under $50/month">Under $50/mo</option>
-                  <option value="flexible">Flexible</option>
+                <label class="form-label">Cloud Target</label>
+                <select id="appCloud" class="form-select">
+                  <option>AWS</option>
+                  <option>GCP</option>
+                  <option>Azure</option>
+                  <option>Vercel</option>
+                  <option>DigitalOcean</option>
+                  <option>Generic</option>
                 </select>
               </div>
               <div class="form-group">
-                <label class="form-label">Scale</label>
-                <select id="archScale" class="form-select">
-                  <option value="small">Small (hobby/student)</option>
-                  <option value="medium">Medium (startup)</option>
-                  <option value="large">Large (production)</option>
-                </select>
+                <label class="form-label">App Port</label>
+                <input id="appPort" class="form-input" placeholder="e.g. 5000, 8080, 3000" value="8000"/>
               </div>
             </div>
-            <button class="arch-btn" id="archBtn" onclick="runArchitect()">☁️ Design Architecture</button>
+            <div class="form-group">
+              <label class="form-label">Database (optional)</label>
+              <input id="appDb" class="form-input" placeholder="e.g. PostgreSQL, MongoDB, Redis, none"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Generate</label>
+              <div class="check-group">
+                <label class="check-item"><input type="checkbox" id="genDockerfile" checked/><span>Dockerfile</span></label>
+                <label class="check-item"><input type="checkbox" id="genCompose" checked/><span>docker-compose.yml</span></label>
+                <label class="check-item"><input type="checkbox" id="genActions" checked/><span>GitHub Actions CI/CD</span></label>
+              </div>
+            </div>
+            <button class="gen-btn" id="genBtn" onclick="runGenerate()">⚙️ Generate Configs</button>
           </div>
         </div>
 
-        <!-- results -->
-        <div class="panel-card" style="position:relative">
-          <div class="panel-head">
-            <div class="panel-head-title">🏗️ Architecture Plan</div>
-          </div>
-          <div id="archResults">
-            <div class="result-empty">
-              <div class="icon">☁️</div>
-              <p>Describe your project and click<br/>"Design Architecture" to get started.</p>
+        <!-- Results -->
+        <div class="gen-results" style="position:relative">
+          <div id="genResults">
+            <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:380px;text-align:center;gap:.75rem;padding:2rem">
+              <div style="font-size:2.5rem;opacity:.35">🐳</div>
+              <p style="font-size:.84rem;color:var(--muted2)">Fill in the form and click<br/>"Generate Configs" to get started.</p>
             </div>
           </div>
-          <div class="loading-overlay" id="archLoader">
+          <div class="loading-overlay" id="genLoader">
             <div class="loading-spinner"></div>
-            <div class="loading-text">Designing architecture...</div>
+            <div class="loading-text">Generating configs...</div>
           </div>
         </div>
       </div>
@@ -226,9 +246,9 @@
 
 <!-- FOOTER -->
 <footer>
-  <div class="foot-logo">Web<span class="accent">Lens</span></div>
+  <div class="foot-logo"><span class="bracket">{</span> DevForge <span class="bracket">}</span></div>
   <p>Built by <a href="https://my-portfolio-steel-nu-70.vercel.app" target="_blank">Arpit Sehrawat</a> · Bennett University</p>
-  <p><a href="https://github.com/TechnoDream956/web-lens" target="_blank">GitHub ↗</a></p>
+  <p><a href="https://github.com/TechnoDream956/dev-forge" target="_blank">GitHub ↗</a></p>
 </footer>
 
 <!-- TOAST -->
