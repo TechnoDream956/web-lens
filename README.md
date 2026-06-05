@@ -76,6 +76,12 @@ Open http://localhost:3000
 
 > Note: Some pages block bots or require login — the analyzer handles these gracefully with error messages.
 
----
+## Author
 
-Built with ❤️ for SIH 2024 · [Portfolio](https://my-portfolio-steel-nu-70.vercel.app)
+Arpit Sehrawat — @TechnoDream956
+
+Bennett University
+
+AI • Cloud • Backend • Full-Stack Development
+
+
